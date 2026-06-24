@@ -6,3 +6,6 @@ node_modules/
 *.log
 .next/
 dist/
+.vercel
+
+testsprite_tests/tmp/config.json

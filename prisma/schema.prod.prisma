@@ -1,0 +1,132 @@
+// Prisma schema for Maryam Photography CMS — Production (Postgres)
+// This is used on Vercel production. For local dev, use prisma/schema.prisma (SQLite).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== Site-wide Settings (singleton) =====
+model SiteSettings {
+  id              Int      @id @default(1)
+  siteNameAr      String   @default("مريم")
+  siteNameEn      String   @default("Maryam")
+  logoLetter      String   @default("M")
+  taglineAr       String   @default("بصريات سينمائية تلتقط الروح اليمنية والعالمية")
+  taglineEn       String   @default("Yemeni Visual Storyteller")
+  heroTitleAr     String   @default("مريم")
+  heroSubtitleEn  String   @default("M·A·R·Y·A·M")
+  heroDescAr      String   @default("أصوّر ما لا يُرى.")
+  heroCta1Ar      String   @default("استكشف الأعمال")
+  heroCta2Ar      String   @default("قصة مريم")
+  heroStat1Num    String   @default("+250")
+  heroStat1Label  String   @default("جلسة تصوير")
+  heroStat2Num    String   @default("+7")
+  heroStat2Label  String   @default("سنوات خبرة")
+  heroStat3Num    String   @default("+40")
+  heroStat3Label  String   @default("جائزة وتكريم")
+  marqueeWords    String   @default("بورتريه,Portraits,أعراس,Weddings,ثقافة,Culture,مناظر,Landscapes,صنعاء,Sana'a,عدن,Aden")
+  aboutTitleAr    String   @default("قصة خلف العدسة")
+  aboutSubtitleEn String   @default("About the Artist")
+  aboutHeadingAr  String   @default("من سردات صنعاء إلى عدسة العالم")
+  aboutPara1      String   @default("")
+  aboutPara2      String   @default("")
+  aboutTags       String   @default("")
+  aboutSignature  String   @default("~ مريم")
+  portfolioTitleAr    String @default("معرض الأعمال")
+  portfolioSubtitleEn String @default("Selected Works")
+  servicesTitleAr     String @default("خدمات التصوير")
+  servicesSubtitleEn  String @default("Services & Packages")
+  testimonialsTitleAr String @default("آراء العملاء")
+  testimonialsSubtitleEn String @default("Client Voices")
+  contactTitleAr      String @default("لنبدأ حكايتك")
+  contactSubtitleEn   String @default("Let's Create Together")
+  contactEmail    String   @default("hello@maryam.photo")
+  contactPhone    String   @default("+967 77 123 4567")
+  contactAddress  String   @default("صنعاء القديمة · اليمن")
+  contactInstagram String  @default("#")
+  contactWhatsapp  String  @default("#")
+  footerDesc      String   @default("")
+  footerCopyright String   @default("© 2024 مريم. جميع الحقوق محفوظة.")
+  primaryColor    String   @default("oklch(0.82 0.12 80)")
+  backgroundColor String   @default("oklch(0.08 0.005 285)")
+  updatedAt       DateTime @updatedAt
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  titleAr     String
+  titleEn     String
+  category    String   @default("weddings")
+  year        String   @default("2024")
+  location    String
+  description String   @default("")
+  imageData   String   @default("")
+  palette1    String   @default("oklch(0.4 0.1 40)")
+  palette2    String   @default("oklch(0.2 0.05 285)")
+  palette3    String   @default("oklch(0.78 0.13 75)")
+  motif       String   @default("bride")
+  span        String   @default("normal")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([published])
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  titleAr     String
+  titleEn     String
+  description String   @default("")
+  price       String   @default("")
+  duration    String   @default("")
+  features    String   @default("[]")
+  icon        String   @default("Camera")
+  accentFrom  String   @default("oklch(0.78 0.13 75 / 0.15)")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  quoteAr   String
+  nameAr    String
+  roleAr    String
+  roleEn    String
+  rating    Int      @default(5)
+  avatar    String   @default("")
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PhilosophyCard {
+  id        Int      @id @default(autoincrement())
+  icon      String   @default("Camera")
+  titleAr   String
+  titleEn   String
+  descAr    String
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
